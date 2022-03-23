@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #text {
+        width: 300px;
+        height: 500px;
+        position: relative;
+        border: 1px solid black;
+        overflow: hidden;
+        float: left;
+        top: 0;
+        
+      }
+      #context {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 10px;
+      }
+      #box1 {
+        height: 502px;
+        width: 20px;
+        background-color: aqua;
+        float: left;
+        position: relative;
+        top: 0;
+        border-radius: 10px;
+      }
+      #box2 {
+        width: 20px;
+        height: 20px;
+        background-color: beige;
+        position: absolute;
+        border: 1px solid red;
+        left: 0;
+        top: 0;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function scroll(obj,fb) {
+        obj.onmousewheel = fn;
+        obj.addEventListener("DOMMouseScroll", fn,false);
+        function fn(ev) {
+          if (ev.detail) {
+            down=ev.detail>0;
+          } else {
+            down=ev.wheelDelta<0;
+          }
+          fb(ev,down)
+          // return false;
+          // ev.preventDefault();
+        }
+      }
+      window.onload = function () {
+        var text = document.getElementById("text");
+        var context = document.getElementById("context");
+        var box1 = document.getElementById("box1");
+        var box2 = document.getElementById("box2");
+        var y=0;
+        //封装一个移动方法
+        function move(y){
+            if (y < 0) {y = 0;}
+            if (y > box1.clientHeight - box2.clientHeight) {y = box1.clientHeight - box2.clientHeight;}
+            //计算比例
+            var scale = y / (box1.clientHeight - box2.clientHeight);
+            context.style.top =scale * (text.clientHeight - context.clientHeight) + "px";
+            box2.style.top = y + "px";
+            }
+//滑动
+        box2.onmousedown = function (ev) {
+          var disY = ev.clientY - box2.offsetTop;
+          console.log(2);
+
+          document.onmousemove = function (ev) {
+            console.log(1);
+            var y = ev.clientY - disY;
+            move(y);
+          };
+
+          document.onmouseup = function () {
+            document.onmousemove = null;
+            console.log(3);
+          };
+          return false;
+          ev.preventDefault();//取消默认
+            //滚轮绑定
+        };
+        //键盘绑定
+        document.onkeydown=function(ev){
+          switch(ev.keyCode){
+            case 38:y-=5;
+            break;
+            case 40:y+=5;
+            break;
+            // default;
+            break;
+          }
+          move(y);
+        }
+        //滚轮绑定
+        function box2move(ev,down){
+          if(down){
+            y+=10;
+          }
+          else{
+            y-=10;
+          }
+          move(y);
+        }
+        scroll(text,box2move);
+        //点击事件绑定
+        box1.onclick=function(ev){
+          console.log(box2.clientHeight,box2.offsetHeight);
+          var y_y=ev.clientY-box1.offsetTop-box2.offsetHeight/2;
+          move(y_y);
+
+        }
+      };
+      
+    </script>
+    <div id="text">
+      <div id="context">
+        “友谊？你们还懂友谊？”听了妈妈的这句话，我好生气，我知道，也许在大人眼里，我只不过是一个十二岁的“黄毛丫头”，但是，在我认为，我一是一个可以为了自己的理想，追求而努力奋斗的“大人”了。或许，昨天，我并不是一个值得人们注意的小女孩，但是，在今天，我却是一个懂得了珍惜友谊的大女孩了。
+        　　从幼稚园里开始，我就有好多“好朋友”。从一年级开始，我便有了新朋友，忘了那陪伴我三年的“知己”。从一年级，我便有了两个“铁哥们儿”——董洁与李晨。或许在六年里，我们吵过驾，生过气，但从没有让我们对彼此失去信任，相反，让我们三个成为了——死党！六年里，我们有过欢笑，有过伤心，我们有一起抱头痛哭，有一起大骂别人的时候，那时的我们，是在一条绳上的，我们对彼此是透明的，从不隐瞒，从不欺骗，就是这，让我们三个走过了即将结束的童年！
+        　　记得四年级时，有一次我没考好，说什么都不敢回家，是李晨和董洁两个人给予我勇气，让我回家“坦白”的。他俩陪着我在操场上一圈一圈的走，一遍一遍的骂，一声一声的哭。直到我们累得走不动时，他俩才开口说：“回家吧，或许，在你家里，正有等待你回去的妈妈呢！快回去吧！乖一点儿！”听了这好像我姐姐说的话，谁能不动心呢？每当我伤心，难过，寂寞时，我的脑海里，只有四个人，爸，妈，董洁和李晨！想到这两个活泼可爱，对生活充满信心，带给我快乐的“天使”时，总会痴痴的笑；想到她们和我一起考试迟到被打手时，总会对自己自责；想到我们一起站在桥上大喊大叫，被人看时，总会傻傻得跳；想到我们一起在校园追着打时，总会呆呆得看；想到……
+        (作文网 Zww.Com.cn)
+        　　在我和她俩相处得六年里，他们让我从“哑巴”走向活泼；他们让我从胆小走向勇敢；她们让我从自卑走向乐观。是她们让我的生活充满阳光，欢笑与鲜花。
+        　　在这即将毕业的日子里，更让我明白了友谊的珍贵，朋友的难得，更何况是这份死党的情。在这即将毕业的日子里，更让我明白了死党的意义，那就是不论你几天见不到她，一接上她的电话，兴奋得睡不着觉的那个人；是那个在雪天吃着啃不懂得雪糕，但和你追求浪漫的那个人；是那个唯一有权知道被你压在书包底层的试卷上分数的那个人。
+        　　在这即将毕业的日子里，我们要在一起，大声地说出那憋了好久的话：
+        　　我们，要永远，永远，在一起！
+      </div>
+    </div>
+    <div id="box1">
+      <div id="box2"></div>
+    </div>
+  </body>
+</html>
