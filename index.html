@@ -1,2 +1,139 @@
-hey,傻der王祥
-别看了说的就是你王祥
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #text {
+        width: 300px;
+        height: 500px;
+        position: relative;
+        border: 1px solid black;
+        overflow: hidden;
+        float: left;
+        top: 0;
+        
+      }
+      #context {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 10px;
+      }
+      #box1 {
+        height: 502px;
+        width: 20px;
+        background-color: aqua;
+        float: left;
+        position: relative;
+        top: 0;
+        border-radius: 10px;
+      }
+      #box2 {
+        width: 20px;
+        height: 20px;
+        background-color: beige;
+        position: absolute;
+        border: 1px solid red;
+        left: 0;
+        top: 0;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function scroll(obj,fb) {
+        obj.onmousewheel = fn;
+        obj.addEventListener("DOMMouseScroll", fn,false);
+        function fn(ev) {
+          if (ev.detail) {
+            down=ev.detail>0;
+          } else {
+            down=ev.wheelDelta<0;
+          }
+          fb(ev,down)
+          // return false;
+          // ev.preventDefault();
+        }
+      }
+      window.onload = function () {
+        var text = document.getElementById("text");
+        var context = document.getElementById("context");
+        var box1 = document.getElementById("box1");
+        var box2 = document.getElementById("box2");
+        var y=0;
+        //封装一个移动方法
+        function move(y){
+            if (y < 0) {y = 0;}
+            if (y > box1.clientHeight - box2.clientHeight) {y = box1.clientHeight - box2.clientHeight;}
+            //计算比例
+            var scale = y / (box1.clientHeight - box2.clientHeight);
+            context.style.top =scale * (text.clientHeight - context.clientHeight) + "px";
+            box2.style.top = y + "px";
+            }
+//滑动
+        box2.onmousedown = function (ev) {
+          var disY = ev.clientY - box2.offsetTop;
+          console.log(2);
+
+          document.onmousemove = function (ev) {
+            console.log(1);
+            var y = ev.clientY - disY;
+            move(y);
+          };
+
+          document.onmouseup = function () {
+            document.onmousemove = null;
+            console.log(3);
+          };
+          return false;
+          ev.preventDefault();//取消默认
+            //滚轮绑定
+        };
+        //键盘绑定
+        document.onkeydown=function(ev){
+          switch(ev.keyCode){
+            case 38:y-=5;
+            break;
+            case 40:y+=5;
+            break;
+            // default;
+            break;
+          }
+          move(y);
+        }
+        //滚轮绑定
+        function box2move(ev,down){
+          if(down){
+            y+=10;
+          }
+          else{
+            y-=10;
+          }
+          move(y);
+        }
+        scroll(text,box2move);
+        //点击事件绑定
+        box1.onclick=function(ev){
+          console.log(box2.clientHeight,box2.offsetHeight);
+          var y_y=ev.clientY-box1.offsetTop-box2.offsetHeight/2;
+          move(y_y);
+
+        }
+      };
+      
+    </script>
+    <div id="text">
+      <div id="context">
+        hey傻der李志荣，说的就是你还瞅！
+      </div>
+    </div>
+    <div id="box1">
+      <div id="box2"></div>
+    </div>
+  </body>
+</html>
